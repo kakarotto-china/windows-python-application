@@ -4,9 +4,9 @@
 def reCheckJoy(pygame, autoStart: int):
     '''
     检测手柄是否连接
-    :param pygame:
-    :param autoStart:
-    :return: 连接返回True, 并将全局变量AUTO_START设置为1 未连接返回False
+    :param pygame: 当前pygame模块, 用于手柄检测, 卸载模块
+    :param autoStart: 控制主菜单中的分支
+    :return: 连接返回True, 未连接返回False
     '''
 
     global AUTO_START
@@ -15,12 +15,12 @@ def reCheckJoy(pygame, autoStart: int):
     joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
     if len(joysticks) == 0:
         printRed("手柄已经断开, 请重新连接手柄!!!")
-        AUTO_START = autoStart  # 未检测到手柄, 全局变量AUTO_STAR置为1, 返回后, 则在主菜单中开始检测, 连接后继续调用start方法
+        AUTO_START = autoStart  # 未检测到手柄, 设置全局变量AUTO_STAR, 返回后, 则在主菜单中开始检测, 连接后继续调用相应的方法
         pygame.display.quit()
         pygame.joystick.quit()
         return False
     for joystick in joysticks:
-        joystick.init()  # 必须初始化来获取输入事件
+        joystick.init()  # 必须初始化来获取手柄输入事件
 
     return True
 
@@ -322,7 +322,7 @@ def doMap():
 
 def showConfig():
     '''
-    显示当前未见mapping.ini和binding.ini配置关系
+    显示当前文件mapping.ini和binding.ini的配置关系
     :return:
     '''
 
@@ -519,6 +519,7 @@ def init():
         AUTO_START: 自动启动, 初始值为0
                     在启动菜单0后, 手柄断开则会将值置为1, 再次连接手柄后, 则会自动启动, 退出菜单0后则会置为-1, 继续显示主菜单页面
                     在启动菜单1后，手柄断开则会将值置为2, 再次连接手柄后, 则会自动启动, 退出菜单0后则会置为-1, 继续显示主菜单页面
+                    在启动菜单4后，手柄断开则会将值置为3, 再次连接手柄后, 则会自动启动, 退出菜单0后则会置为-1, 继续显示主菜单页面
         TEMP_NOT_BIND_OR_MAPPING: 用于提示是否绑定或映射的全局临时变量
     :return:
     '''
